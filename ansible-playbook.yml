@@ -1,0 +1,17 @@
+- name: "Configuring j-master"
+  hosts: j-m
+  become: yes
+  roles:
+    - j-master
+
+- name: "configuring j-slave"
+  hosts: localhost
+  become: yes
+  roles:
+    - j-slave
+
+- name: "k8-setup"
+  hosts: k8
+  become: yes
+  roles:
+    - k8-setup

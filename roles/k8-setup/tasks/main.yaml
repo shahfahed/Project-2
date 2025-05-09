@@ -1,0 +1,2 @@
+- name: "k8s setup"
+  script: k8-setup.sh

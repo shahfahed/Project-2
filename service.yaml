@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: apache2-svc
+  namespace: default
+spec:
+  selector:
+    app: apache2
+  type: NodePort
+  ports:
+    - name: svc-ports
+      targetPort: 80
+      port: 80
+      nodePort: 30002

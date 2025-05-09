@@ -1,0 +1,18 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: project-2
+  namespace: default
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: apache2
+  template:
+    metadata:
+      labels:
+        app: apache2
+    spec:
+      containers:
+        - name: project-2-deployment
+          image: shahfahed/project-2

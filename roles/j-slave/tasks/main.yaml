@@ -1,0 +1,14 @@
+- name: "cache_update"
+  apt:
+    update_cache: yes
+
+- name: "java installation"
+  apt:
+    name: openjdk-17-jdk
+    state: present
+
+- name: Docker installation
+  script: j-slave.sh
+
+- name: Docker permissions to Ubuntu User
+  ansible.builtin.shell: sudo usermod -aG docker ubuntu

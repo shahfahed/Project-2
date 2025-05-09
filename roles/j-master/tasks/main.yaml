@@ -1,0 +1,11 @@
+- name: "cache_update"
+  apt:
+    update_cache: yes
+
+- name: "java installation"
+  apt:
+    name: openjdk-17-jdk
+    state: present
+
+- name: "jenkins installation"
+  script: j-master.sh

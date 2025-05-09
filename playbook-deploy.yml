@@ -1,0 +1,39 @@
+- name: execute deployment on k8s
+  hosts: k-m
+  become: yes
+  tasks:
+   - name: Deploying Application
+     ansible.builtin.shell: | 
+       if [ `kubectl get deployment | grep -v NAME | awk '{print $1}' | grep apache2 | wc -l` -gt 0 ]; then  
+          echo "deleteing previous application deployment"
+          kubectl delete deployment `kubectl get deployment | grep -v NAME | awk '{print $1}' | grep apache2`
+          echo "creating new application deployment"
+          kubectl create deployment apache2 --image=shahfahed/project-2:{{ tag }}
+       else 
+          echo "Deploying Application"
+          kubectl create deployment apache2 --image=shahfahed/project-2:{{ tag }}
+       fi
+
+
+   - name: increase replicas 
+     ansible.builtin.shell: kubectl scale deployment apache2 --replicas=2
+
+   - name: copy service.yaml
+     copy:
+       src: /home/ubuntu/jenkins/workspace/qa-pipeline/service.yaml
+       dest: /home/ubuntu
+       owner: ubuntu
+       group: ubuntu
+       mode: '0644'
+    
+   - name: Deploying Service
+     ansible.builtin.shell: | 
+       if [ `kubectl get service | grep -v NAME | awk '{print $1}' | grep apache2-svc | wc -l` -gt 0 ]; then  
+          echo "deleteing previous service"
+          kubectl delete service `kubectl get service | grep -v NAME | awk '{print $1}' | grep apache2-svc`
+          echo "Creating New Service"
+          kubectl apply -f service.yaml
+       else 
+          echo "Creating Service"
+          kubectl apply -f service.yaml
+       fi
